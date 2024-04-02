@@ -1,15 +1,18 @@
 <?php
+// Programmer Name: Ms. Lim Jia Yong, Project Manager
+// Description: Defines relationship of user table with other database tables
+// Edited on: 1 March 2022
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -17,28 +20,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'first_name',
-        'last_name',
+        'username',
         'email',
-        'email_verified_at',
-        'telephone',
-        'image',
+        'password',
+        'role', // Either "customer" , "kitchenStaff" or "admin"
     ];
-
-    public function employer()
-    {
-        return $this->hasOne(Employer::class);
-    }
-
-    public function client()
-    {
-        return $this->hasOne(Client::class);
-    }
-
-    public function superManager()
-    {
-        return $this->hasOne(SuperManager::class);
-    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -51,15 +37,19 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+
+    public function cartItems() {
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function orders() {
+        return $this->hasMany(Order::class);
     }
 }
