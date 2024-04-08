@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -25,7 +26,8 @@ class ClientController extends Controller
      */
     public function create()
     {
-        return view('clients.create');
+        $users = User::all();
+        return view('clients.create', compact('users'));
     }
 
     /**
@@ -41,8 +43,59 @@ class ClientController extends Controller
         ]);
 
         $client = Client::create($validatedData);
-        return redirect()->route('clients.index')->with('success', 'Client created successfully.');
+        return redirect()->route('clients.index')->with('success', 'Client créé avec succès.');
     }
 
-    // Add other CRUD methods as needed
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Client  $client
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Client $client)
+    {
+        $client->load('user');
+        return view('clients.show', compact('client'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Client  $client
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Client $client)
+    {
+        $users = User::all();
+        return view('clients.edit', compact('client', 'users'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Client  $client
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Client $client)
+    {
+        $validatedData = $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $client->update($validatedData);
+        return redirect()->route('clients.index')->with('success', 'Client mis à jour avec succès.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Client  $client
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Client $client)
+    {
+        $client->delete();
+        return redirect()->route('clients.index')->with('success', 'Client supprimé avec succès.');
+    }
 }

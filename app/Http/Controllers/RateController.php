@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Rate;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 class RateController extends Controller
@@ -25,7 +26,8 @@ class RateController extends Controller
      */
     public function create()
     {
-        return view('rates.create');
+        $clients = Client::all();
+        return view('rates.create', compact('clients'));
     }
 
     /**
@@ -43,8 +45,61 @@ class RateController extends Controller
         ]);
 
         $rate = Rate::create($validatedData);
-        return redirect()->route('rates.index')->with('success', 'Rate created successfully.');
+        return redirect()->route('rates.index')->with('success', 'Note créée avec succès.');
     }
 
-    // Add other CRUD methods as needed
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Rate  $rate
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Rate $rate)
+    {
+        $rate->load('client');
+        return view('rates.show', compact('rate'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Rate  $rate
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Rate $rate)
+    {
+        $clients = Client::all();
+        return view('rates.edit', compact('rate', 'clients'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Rate  $rate
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Rate $rate)
+    {
+        $validatedData = $request->validate([
+            'rate' => 'required|numeric',
+            'comment' => 'nullable|string',
+            'client_id' => 'required|exists:clients,id',
+        ]);
+
+        $rate->update($validatedData);
+        return redirect()->route('rates.index')->with('success', 'Note mise à jour avec succès.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Rate  $rate
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Rate $rate)
+    {
+        $rate->delete();
+        return redirect()->route('rates.index')->with('success', 'Note supprimée avec succès.');
+    }
 }
