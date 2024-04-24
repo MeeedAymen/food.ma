@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Services\UserServices;
 
 class UserController extends Controller
 {
+protected $userServices;
+    public function __construct(UserServices $userServices)
+    {
+        $this->userServices = $userServices;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,8 +20,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('users.index', compact('users'));
+        return view('users.index', [
+            "users" => $this->userServices->get()
+        ]);
+        @foereach(users as user)
+        td user->name
+        td user->email
     }
 
     /**

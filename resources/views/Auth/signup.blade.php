@@ -57,7 +57,7 @@
                                 <label class="block">
                                     <span class="sr-only">Choose profile photo</span>
                                     <input type="file" onchange="loadFile(event)"
-                                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:text-sm file:font-semibold file:bg-blue-200 file:text-black hover:file:text-white hover:file:bg-blue-600" />
+                                        class="block w-full text-sm text-gray-500 file:mr-4 file:border-none file:py-2 file:px-4 file:rounded-2xl file:text-sm file:font-semibold file:bg-blue-200 file:text-blue-600 hover:file:text-white hover:file:bg-blue-500" />
                                 </label>
                             </div>
 
