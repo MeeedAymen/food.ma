@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rate;
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class RateController extends Controller
 {

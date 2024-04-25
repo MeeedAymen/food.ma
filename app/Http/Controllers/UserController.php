@@ -25,7 +25,7 @@ protected $userServices;
         ]);
         @foereach(users as user)
         td user->name
-        td user->email
+        td user->eèmail
     }
 
     /**

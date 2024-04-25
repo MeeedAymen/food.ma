@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Employer;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class EmployerController extends Controller
 {
