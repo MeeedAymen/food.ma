@@ -26,6 +26,8 @@ function navAnimation() {
     // If screen size >= 768px, JS detects scroll event, when user scrolls,
     // navbar bg become white, font-color becomes darker
     const nav = document.querySelector('header nav');
+    if (!nav) return;
+
     const logo = document.querySelector('.logo');
     const logoName = document.querySelector('.logo-name');
     const links = document.querySelectorAll('.nav-links li a');
@@ -41,9 +43,9 @@ function navAnimation() {
 
 function lightNav(nav, logo, logoName, links, burgerLines, delay=0) {
     setTimeout(() => {
-        nav.classList.add('nav-scroll');
-        logo.src = assetBaseUrl + "images/Black Logo.png";
-        logoName.classList.add('nav-link-scroll');
+        if (nav) nav.classList.add('nav-scroll');
+        if (logo) logo.src = assetBaseUrl + "images/Black Logo.png";
+        if (logoName) logoName.classList.add('nav-link-scroll');
         links.forEach(link => {
             link.classList.add('nav-link-scroll');
         })
@@ -56,18 +58,18 @@ function lightNav(nav, logo, logoName, links, burgerLines, delay=0) {
 
 function darkNav(nav, logo, logoName, links, burgerLines, delay=0) {
     setTimeout(() => {
-        nav.classList.remove('nav-scroll');
-        logoName.classList.remove('nav-link-scroll');
+        if (nav) nav.classList.remove('nav-scroll');
+        if (logoName) logoName.classList.remove('nav-link-scroll');
         links.forEach(link => {
             link.classList.remove('nav-link-scroll');
         })
-        if (nav.dataset.theme === "light") {
-            logo.src = assetBaseUrl + "images/Black Logo.png";
+        if (nav && nav.dataset.theme === "light") {
+            if (logo) logo.src = assetBaseUrl + "images/Black Logo.png";
             burgerLines.forEach(line => {
                 line.style.backgroundColor = dark;
             });
         } else {
-            logo.src = assetBaseUrl + "images/White Logo.png";
+            if (logo) logo.src = assetBaseUrl + "images/White Logo.png";
             burgerLines.forEach(line => {
                 line.style.backgroundColor = light;
             });
@@ -85,6 +87,8 @@ function burgerAnimation() {
     const burger = document.querySelector('.burger');
     const navLinks = document.querySelector('.nav-links');
     const burgerLines = document.querySelectorAll('.burger div');
+
+    if (!burger || !navLinks) return;
 
     // Hover burger
     burger.onmouseover = () => {

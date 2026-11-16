@@ -1,6 +1,5 @@
 <?php
 
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,13 +13,21 @@ class AddColumnsToMenusTable extends Migration
      */
     public function up()
     {
-        Schema::table('menus', function (Blueprint $table) {
-            $table->string('type')->default('undefined');
-            $table->decimal('estCost', 6, 2)->default('undefined');
-            $table->integer('allergic')->default('0');
-            $table->integer('vegetarian')->default('0');
-            $table->integer('vegan')->default('0');
-        });
+        $columns = [
+            'type' => fn (Blueprint $table) => $table->string('type')->default('undefined'),
+            'estCost' => fn (Blueprint $table) => $table->decimal('estCost', 6, 2)->nullable(),
+            'allergic' => fn (Blueprint $table) => $table->integer('allergic')->default(0),
+            'vegetarian' => fn (Blueprint $table) => $table->integer('vegetarian')->default(0),
+            'vegan' => fn (Blueprint $table) => $table->integer('vegan')->default(0),
+        ];
+
+        foreach ($columns as $column => $definition) {
+            if (!Schema::hasColumn('menus', $column)) {
+                Schema::table('menus', function (Blueprint $table) use ($definition) {
+                    $definition($table);
+                });
+            }
+        }
     }
 
     /**
@@ -30,12 +37,6 @@ class AddColumnsToMenusTable extends Migration
      */
     public function down()
     {
-        Schema::table('menus', function (Blueprint $table) {
-            $table->dropColumn('type');
-            $table->dropColumn('estCost');
-            $table->dropColumn('allergic');
-            $table->dropColumn('vegetarian');
-            $table->dropColumn('vegan');
-        });
+        // Columns live on the original create_menus_table migration.
     }
 }
